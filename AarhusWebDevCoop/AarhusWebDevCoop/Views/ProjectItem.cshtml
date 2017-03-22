@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.ProjectItem>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+
+@{
+	var SelectionId = Model.Content.GetPropertyValue<Int32>("projectStatus");
+	var RadioTextValue = umbraco.library.GetPreValueAsString(SelectionId);
+
+	Layout = "Master.cshtml";
+}
+<div class="container">
+<h1>@Umbraco.Field("projectTitle")</h1>
+<p>@Umbraco.Field("projectDescription")</p>
+<br>
+<p>Project Status: @RadioTextValue</p>
+</div>
+
+	

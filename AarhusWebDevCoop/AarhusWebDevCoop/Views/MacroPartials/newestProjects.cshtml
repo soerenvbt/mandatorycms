@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	@{
+		var projectDropdown = 
+			CurrentPage.AncestorOrSelf(1)
+			.Children()
+			.Where("DocumentTypeAlias == \"projectsOverview\"")
+			.First()
+			.Children()
+			.Where("Visible")
+			.Where("projectStatus.Contains(\"9\")")
+			.OrderBy("CreateDate desc")
+			.Take(3);
+	}
+	
+<ul>
+@foreach (var page in projectDropdown) {
+<li>@page.Name</li>
+}
+</ul>

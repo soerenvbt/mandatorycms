@@ -1,0 +1,51 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Newtonsoft.Json;
+@using Umbraco.Web.Models;
+@{
+	Layout = "Master.cshtml";
+	var memberService = ApplicationContext.Current.Services.MemberService;
+	var ActiveMembers = memberService.GetMembersByGroup("Active");
+	var GuestMembers = memberService.GetMembersByGroup("Guest");
+
+}
+
+<div class="container">		
+<div class="col-md-6">	
+	<h1>Active members</h1>
+@foreach (var member in ActiveMembers) {
+	
+String[] skills = member.GetValue("skills").ToString().Split(',');
+string skillString =
+string.Join(", ", from skill in skills
+select umbraco.library.GetPreValueAsString(Convert.ToInt32(skill)));
+	
+string image = member.GetValue<string>("photo");
+var imageCrop = JsonConvert.DeserializeObject<ImageCropDataSet>(image);
+var imagePath = imageCrop.Src.GetCropUrl(width: 100);
+
+<div class="row">	
+
+<div class="col-md-4">
+@member.Name <br>
+@member.GetValue("address")<br>
+@member.GetValue("zip") @member.GetValue("city") <br>
+Email: @member.Email<br>
+Skills: @skillString <br>
+</div>
+	<div class="col-md-8">
+	<img src="@imagePath " />
+		</div>
+</div>
+	<br>
+}	
+</div>
+<div class="col-md-6">
+	<h1>Guest members</h1>
+@foreach (var member in GuestMembers) {
+	
+@member.Name <br>
+@member.GetValue("mobile")
+	<br>
+}	
+</div>
+</div>
